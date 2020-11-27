@@ -1,5 +1,6 @@
 package com.yangxiansheng.crm.workbench.service.impl;
 
+import com.yangxiansheng.crm.base.bean.Message;
 import com.yangxiansheng.crm.base.canstants.CrmExceptionEnum;
 import com.yangxiansheng.crm.base.exception.CrmException;
 import com.yangxiansheng.crm.base.util.DateTimeUtil;
@@ -15,6 +16,7 @@ import com.yangxiansheng.crm.workbench.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.ArrayList;
@@ -43,6 +45,8 @@ public class CustomerServiceImpl implements CustomerService {
     private TranMapper tranMapper;
     @Autowired
     private ContactsMapper contactsMapper;
+    @Autowired
+    private Message mess;
     //根据客户姓名异步查询客户id
     @Override
     public String saveCustomerName(String company) {
@@ -189,5 +193,4 @@ public class CustomerServiceImpl implements CustomerService {
         }
         return customerRemark;
     }
-
 }

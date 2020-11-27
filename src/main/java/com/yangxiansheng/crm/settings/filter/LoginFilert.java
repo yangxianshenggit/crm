@@ -20,8 +20,8 @@ import javax.servlet.http.HttpServletResponse;
 public class LoginFilert implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        StringBuffer requestURL = request.getRequestURL();
-        if (requestURL.toString().contains("login")){
+        String url = request.getRequestURL().toString();
+        if (url.contains("login")||url.contains("Login")){
             return true;
         }
         User user = (User) request.getSession().getAttribute(CrmConstansts.LOGIN_USER);

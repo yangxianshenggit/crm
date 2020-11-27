@@ -50,9 +50,10 @@
 	<!--注册登录拦截器-->
 	<mvc:interceptors>
 		<mvc:interceptor>
-			<!--path拦截的路径，不是目录，根路径拦截失效-->
-			<mvc:mapping path="/admin/*"/>
-			<bean class="com.bjpowernode.ssm.blog.interceptor.LoginInterceptor" />
+			<!--path拦截的路径，/**拦截所有路径-->
+			<mvc:mapping path="/**"/>
+            <mvc:exclude-mapping path="/crm/image/**,/crm/query/**" />
+			<bean class="com.yangxiansheng.crm.settings.filter.LoginFilert" />
 		</mvc:interceptor>
 
 	</mvc:interceptors>

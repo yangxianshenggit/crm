@@ -42,7 +42,6 @@ public class Tran {
 
     private List<TranRemark> tranRemarks;
     private List<TranHistory> tranHistories;
-
     @Override
     public String toString() {
         return "Tran{" +

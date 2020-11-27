@@ -12,12 +12,14 @@ import com.yangxiansheng.crm.workbench.bean.Tran;
 import com.yangxiansheng.crm.workbench.bean.TranRemark;
 import com.yangxiansheng.crm.workbench.service.TranService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.xml.ws.spi.http.HttpExchange;
 import java.util.List;
@@ -39,6 +41,31 @@ public class TranController {
     private TranService tranService;
     @Autowired
     private Message mess;
+
+    //修改交易信息
+    @RequestMapping("/workbench/tran/updateTran")
+    @ResponseBody
+    public Message updateTran(String customerName, HttpSession session, Tran tran) {
+        User user = (User) session.getAttribute(CrmConstansts.LOGIN_USER);
+        tran.setEditBy(user.getName());
+        try {
+            tranService.updateTran(tran, customerName);
+            mess.setSuccess(true);
+            mess.setMess("修改交易信息成功");
+        } catch (CrmException e) {
+            mess.setSuccess(false);
+            mess.setMess(e.getMessage());
+        }
+        return mess;
+    }
+
+    //跳转修改交易信息界面
+    @RequestMapping("/workbench/tran/toTranEdit")
+    public String toTranEdit(String id, HttpServletRequest request) {
+        Tran tran = tranService.toTranEdit(id);
+        request.setAttribute("tran", tran);
+        return "/transaction/edit";
+    }
 
     //删除备注
     @RequestMapping("/workbench/tran/deleteTranRemark")

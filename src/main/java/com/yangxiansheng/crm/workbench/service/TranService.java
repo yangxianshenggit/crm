@@ -42,4 +42,8 @@ public interface TranService {
 
     //删除备注
     void deleteTranRemark(String id);
+    //跳转修改交易信息界面
+    Tran  toTranEdit(String id);
+    //修改交易信息
+    void updateTran(Tran tran, String customerName);
 }

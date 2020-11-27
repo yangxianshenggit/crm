@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -136,7 +137,7 @@ public class TranServiceImpl implements TranService {
     //跳转详情页
     @Override
     public Tran toDetail(String id) {
-        //根据逐渐查询相关交易信息
+        //根据主键查询相关交易信息
         Tran tran = tranMapper.selectByPrimaryKey(id);
         //设置客户名称
         Customer customer = customerMapper.selectByPrimaryKey(tran.getCustomerId());
@@ -213,12 +214,55 @@ public class TranServiceImpl implements TranService {
             throw new CrmException(CrmExceptionEnum.TRAN_REMARK_ADD_FAIL);
         }
     }
+
     //删除备注
     @Override
     public void deleteTranRemark(String id) {
         int cont = tranRemarkMapper.deleteByPrimaryKey(id);
-        if (cont==0){
+        if (cont == 0) {
             throw new CrmException(CrmExceptionEnum.TRAN_REMARK_DELETE_FAIL);
+        }
+    }
+
+    //跳转修改交易信息界面
+    @Override
+    public Tran toTranEdit(String id) {
+        //通过主键查询交易信息
+        Tran tran = tranMapper.selectByPrimaryKey(id);
+        //设置客户名称
+        Customer customer = customerMapper.selectByPrimaryKey(tran.getCustomerId());
+        tran.setCustomerId(customer.getName());
+        //设置联系人名称
+        Contacts contacts = contactsMapper.selectByPrimaryKey(tran.getContactsId());
+        tran.setContactsId(contacts.getFullname());
+        return tran;
+    }
+
+    //修改交易信息
+    @Override
+    public void updateTran(Tran tran, String customerName) {
+        tran.setEditTime(DateTimeUtil.getSysTime());
+        if (tran.getCustomerId().equals("1")) {
+            //客户不存在，进行创建
+            Customer customer = new Customer();
+            customer.setId(UUIDUtil.getUUID());
+            customer.setOwner(tran.getOwner());
+            customer.setContactSummary(tran.getContactSummary());
+            customer.setCreateBy(tran.getCreateBy());
+            customer.setCreateTime(DateTimeUtil.getSysTime());
+            customer.setNextContactTime(tran.getNextContactTime());
+            customer.setDescription(tran.getDescription());
+            customer.setName(customerName);
+            int count = customerMapper.insertSelective(customer);
+            if (count == 0) {
+                throw new CrmException(CrmExceptionEnum.CUSTOMER_ADD_FAIL);
+            }
+            tran.setCustomerId(customer.getId());
+        }
+        //修改交易信息
+        int count = tranMapper.updateByPrimaryKeySelective(tran);
+        if (count == 0) {
+            throw new CrmException(CrmExceptionEnum.TRAN_UPDATE_FAIL);
         }
     }
 }

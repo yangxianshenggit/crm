@@ -133,8 +133,8 @@
 			<div class="btn-toolbar" role="toolbar" style="background-color: #F7F7F7; height: 50px; position: relative;top: 10px;">
 				<div class="btn-group" style="position: relative; top: 18%;">
 				  <button type="button" class="btn btn-primary" onclick="window.location.href='save.html';"><span class="glyphicon glyphicon-plus"></span> 创建</button>
-				  <button type="button" class="btn btn-default" onclick="window.location.href='edit.html';"><span class="glyphicon glyphicon-pencil"></span> 修改</button>
-				  <button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-minus"></span> 删除</button>
+				  <button type="button" class="btn btn-default" onclick="toEditTran()"><span class="glyphicon glyphicon-pencil"></span> 修改</button>
+				  <button type="button" onclick="deleteTrans()" class="btn btn-danger"><span class="glyphicon glyphicon-minus"></span> 删除</button>
 				</div>
 				
 				
@@ -215,5 +215,44 @@
 				});
 			}
 		});
+	};
+	//点击修改按钮触发事件
+	function toEditTran() {
+		//查看当前是否选中要修改的交易
+		if($('.son:checked').length==0){
+			alert("请选中您要修改的交易")
+		}else if($('.son:checked').length>1){
+			alert("每次最多修改一个交易")
+		}else {
+			//跳转修改交易界面，同时查询相应的信息
+			location.href="/crm/workbench/tran/toTranEdit?id="+$('.son:checked').val();
+		}
 	}
+//删除交易
+function deleteTrans() {
+	if ($('.son:checked').length==0){
+		alert("请选择您要删除的交易")
+	} else if ($('.son:checked').length>1) {
+		alert("每次最多删除一条交易")
+	}else {
+		var flag = confirm("您确定要删除这条交易信息么?");
+		if (flag) {
+			$.ajax({
+				url: '/crm/workbench/tran/deleteTranById',
+				data: {
+					'id': $('.son:checked').val()
+				},
+				dataType: 'json',
+				type: 'post',
+				success: function (data) {
+					alert(data.mess);
+					if (data.success) {
+						//刷新界面
+						location.href = "/crm/toView/transaction/index"
+					}
+				}
+			});
+		}
+	}
+}
 </script>

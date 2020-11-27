@@ -47,7 +47,8 @@ public enum CrmExceptionEnum {
     CONTACTS_ACTIVITY_ADD_FAIL("006","添加关联活动失败"),
     TRAN_ADD_FAIL("007","创建交易失败"),
     TRAN_REMARK_ADD_FAIL("007","创建交易备注失败"),
-    TRAN_REMARK_DELETE_FAIL("007","删除交易备注失败");
+    TRAN_REMARK_DELETE_FAIL("007","删除交易备注失败"),
+    TRAN_UPDATE_FAIL("007","修改交易信息失败");
     private String code;//业务状态码 001：用户登录  002：交易模块
     private String mess;//消息
 

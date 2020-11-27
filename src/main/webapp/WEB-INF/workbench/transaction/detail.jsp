@@ -123,9 +123,9 @@
         </h3>
     </div>
     <div style="position: relative; height: 50px; width: 250px;  top: -72px; left: 700px;">
-        <button type="button" class="btn btn-default" onclick="window.location.href='edit.html';"><span
+        <a type="button" class="btn btn-default" href='/crm/workbench/tran/toTranEdit?id=${tran.id}'><span
                 class="glyphicon glyphicon-edit"></span> 编辑
-        </button>
+        </a>
         <button type="button" onclick="deleteTranButton()" class="btn btn-danger"><span
                 class="glyphicon glyphicon-minus"></span> 删除
         </button>
