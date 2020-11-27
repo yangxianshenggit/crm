@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yangxiansheng.crm.workbench.mapper.ClueMapper">
+    <sql id="sql">c.id,c.fullname,c.owner,c.company,c.phone,c.mphone,c.state,c.source,u.name</sql>
+    <!--查询所有信息-->
+    <select id="saveAllClue" resultType="map">
+        select
+        <include refid="sql"/>
+        from tbl_clue c left join tbl_user u on c.owner = u.id
+        <where>
+            <if test="fullname != null and fullname!= ''">
+                c.fullname like concat('%',#{fullname},'%')
+            </if>
+            <if test="owner != null and owner!= ''">
+                and u.name like concat('%',#{owner},'%')
+            </if>
+            <if test="company != null and company!= ''">
+                and c.company like concat('%',#{company},'%')
+            </if>
+            <if test="phone != null and phone!= ''">
+                and c.phone like concat('%',#{phone},'%')
+            </if>
+            <if test="mphone != null and mphone!= ''">
+                and c.mphone like concat('%',#{mphone},'%')
+            </if>
+            <if test="state != null and state!= ''">
+                and c.state = #{state}
+            </if>
+            <if test="source != null and source!= ''">
+                and c.source = #{source}
+            </if>
+        </where>
+    </select>
+
+</mapper>

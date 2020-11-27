@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yangxiansheng.crm.workbench.mapper.TranMapper">
+    <sql id="sql">t.id,t.owner,t.money,t.name,t.expectedDate,t.customerId,t.stage,t.type,t.source,t.activityId,t.contactsId,t.createBy,t.createTime,t.editBy,t.editTime,t.description,t.contactSummary,t.nextContactTime,u.name uname,c.fullname fullname,s.name sname</sql>
+    <!--查询所有信息-->
+    <select id="saveAllTran" resultType="map">
+        select
+        <include refid="sql"/>
+        from tbl_tran t left join tbl_user u on t.owner = u.id left join tbl_contacts c on t.contactsId = c.id left join tbl_customer s on t.customerId = s.id
+        <where>
+            <if test="contactsId != null and contactsId!= ''">
+                c.fullname like concat('%',#{contactsId},'%')
+            </if>
+            <if test="source != null and source!= ''">
+                and t.source like concat('%',#{source},'%')
+            </if>
+            <if test="type != null and type!= ''">
+                and t.type like concat('%',#{type},'%')
+            </if>
+            <if test="stage != null and stage!= ''">
+                and t.stage like concat('%',#{stage},'%')
+            </if>
+            <if test="customerId != null and customerId!= ''">
+                and s.name like concat('%',#{customerId},'%')
+            </if>
+            <if test="name != null and name!= ''">
+                and t.name like concat('%',#{name},'%')
+            </if>
+            <if test="owner != null and owner!= ''">
+                and u.name like concat('%',#{owner},'%')
+            </if>
+        </where>
+    </select>
+
+</mapper>
